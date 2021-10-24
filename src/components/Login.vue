@@ -6,19 +6,19 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <!-- 表单 -->
-            <el-form class="login_form">
+            <el-form ref="loginFormRef" :model="loginForm" :rules="rules" class="login_form" >
                 <!-- 账号 -->
-                <el-form-item>
-                    <el-input></el-input>
+                <el-form-item prop="username">
+                    <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
-                <el-form-item>
-                    <el-input></el-input>
+                <el-form-item prop="password">
+                    <el-input v-model="loginForm.password" show-password prefix-icon="el-icon-lock"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="login_btns">
-                    <el-button type="primary"> 登录 </el-button>
-                    <el-button type="info"> 重置 </el-button>
+                    <el-button type="primary" @click="login"> 登录 </el-button>
+                    <el-button type="info" @click="resetLoginForm"> 重置 </el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -28,7 +28,55 @@
 <script>
 
 export default {
-
+    data() {
+        return {
+            loginForm: {
+                username: 'admin',
+                password: '123'
+            },
+            rules: {
+                username: [
+                    {
+                        required: true,
+                        message: 'Please input user name',
+                        trigger: 'blur',
+                    },
+                    {
+                        min: 1,
+                        max: 20,
+                        message: 'Length should be 1 to 20',
+                        trigger: 'blur',
+                    },
+                ],
+                password: [
+                    {
+                        required: true,
+                        message: 'Please input password',
+                        trigger: 'blur',
+                    },
+                    {
+                        min: 3,
+                        max: 16,
+                        message: 'Length should be 3 to 16',
+                        trigger: 'blur',
+                    },
+                ],
+            }
+        }
+    },
+    methods: {
+        resetLoginForm() {
+            //console.log(this)
+            this.$refs.loginFormRef.resetFields()
+        },
+        login() {
+            this.$refs.loginFormRef.validate(async (valid) => {
+                if (!valid) return;
+                const rsp = await this.$http.post("login", this.loginForm)
+                console.log(rsp)
+            })
+        }
+    }
 }
 </script>
 
@@ -74,12 +122,13 @@ export default {
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
-
 }
 
 .login_btns {
-    display: flex;
-    justify-content: center;
+    margin-right: 0;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
 }
 
 </style>

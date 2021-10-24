@@ -7,10 +7,16 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 
 import axios from 'axios'
-axios.defaults.baseURL = "http://127.0.0.1:8888/api/v1"
+axios.defaults.baseURL = "http://localhost:8000"
+axios.defaults.headers.common = {
+    "Content-Type": "application/json"
+}
 
-createApp(App)
+const app = createApp(App)
     .use(router)
     .use(ElementPlus)
-    .provide('$http', axios)
-    .mount('#app')
+
+app.config.globalProperties.$http = axios
+
+app.mount('#app')
+

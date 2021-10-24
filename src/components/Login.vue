@@ -26,8 +26,10 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
 
 export default {
+
     data() {
         return {
             loginForm: {
@@ -72,8 +74,15 @@ export default {
         login() {
             this.$refs.loginFormRef.validate(async (valid) => {
                 if (!valid) return;
-                const rsp = await this.$http.post("login", this.loginForm)
+                console.log(this.loginForm)
+                const {data: rsp} = await this.$http.post("login", this.loginForm)
                 console.log(rsp)
+                if (rsp.meta.status != 0) {
+                    return ElMessage.error("登录失败")
+                }
+                ElMessage.success("登录成功");
+                window.sessionStorage.setItem("token", rsp.data.token)
+                this.$router.push('/home')
             })
         }
     }

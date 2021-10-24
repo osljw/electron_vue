@@ -74,7 +74,6 @@ export default {
         login() {
             this.$refs.loginFormRef.validate(async (valid) => {
                 if (!valid) return;
-                console.log(this.loginForm)
                 const {data: rsp} = await this.$http.post("login", this.loginForm)
                 console.log(rsp)
                 if (rsp.meta.status != 0) {

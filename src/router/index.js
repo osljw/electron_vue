@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/components/Login.vue'
 import Home from '@/components/Home.vue'
+import Welcom from '@/components/Welcom.vue'
+import Users from '@/components/user/Users.vue'
 
 const routes = [
   {
@@ -13,7 +15,18 @@ const routes = [
   },
   {
     'path': '/home',
-    component: Home
+    component: Home,
+    redirect: '/welcom',
+    children: [
+      {
+        'path': '/welcom',
+        component: Welcom
+      },
+      {
+        'path': '/用户列表',
+        component: Users
+      }
+    ]
   }
 ]
 

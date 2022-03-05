@@ -41,6 +41,8 @@
 
 <script>
 import { ElMessage } from 'element-plus';
+import { GetMenu} from '@/api/index.js'
+
 export default {
   data() {
     return {
@@ -50,7 +52,7 @@ export default {
     };
   },
   created() {
-    console.log("created")
+    console.log("Home created")
     this.getMenu()
   },
   methods: {
@@ -59,9 +61,10 @@ export default {
       this.$router.push("login");
     },
     async getMenu() {
-      const {data: rsp} = await this.$http.get("menus")
-      console.log(rsp)
-      if (!rsp.meta.status == 200) return ElMessage.error(rsp.meta.msg)
+      //const {data: rsp} = await this.$http.get("menus")
+      const rsp = await GetMenu()
+      console.log("get menu", rsp)
+      if (!rsp.status) return ElMessage.error("获取菜单失败")
       this.menuList = rsp.data
     },
     toggleCollapse() {

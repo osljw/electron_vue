@@ -15,9 +15,13 @@
                 <el-form-item prop="password">
                     <el-input v-model="loginForm.password" show-password prefix-icon="el-icon-lock"></el-input>
                 </el-form-item>
+                <!-- 二次确认密码 -->
+                <el-form-item prop="second_password">
+                    <el-input v-model="loginForm.second_password" show-password prefix-icon="el-icon-lock"></el-input>
+                </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="login_btns">
-                    <el-button type="primary" @click="login"> 登录 </el-button>
+                    <el-button type="primary" @click="register"> 注册 </el-button>
                     <el-button type="info" @click="resetLoginForm"> 重置 </el-button>
                 </el-form-item>
             </el-form>
@@ -27,15 +31,16 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import {Login} from '@/api/index.js'
+import { Register } from '@/api/index.js'
 
 export default {
 
     data() {
         return {
             loginForm: {
-                username: 'admin',
-                password: '123456'
+                username: '',
+                password: '',
+                second_password: ''
             },
             rules: {
                 username: [
@@ -64,6 +69,19 @@ export default {
                         trigger: 'blur',
                     },
                 ],
+                second_password: [
+                    {
+                        required: true,
+                        message: 'Please confirm password',
+                        trigger: 'blur',
+                    },
+                    {
+                        min: 3,
+                        max: 16,
+                        message: 'Length should be 3 to 16',
+                        trigger: 'blur',
+                    },
+                ],
             }
         }
     },
@@ -72,21 +90,22 @@ export default {
             //console.log(this)
             this.$refs.loginFormRef.resetFields()
         },
-        login() {
+        register() {
             this.$refs.loginFormRef.validate(async (valid) => {
                 if (!valid) return;
-                //const {data: rsp} = await this.$http.post("login", this.loginForm)
-                const data = await Login(this.loginForm)
-                console.log("rsp data:", data)
-                console.log(data)
+                if (this.loginForm.password != this.loginForm.second_password) return ElMessage.error("请确认密码一致");
 
-                if (!data.status) {
-                     return ElMessage.error("登录失败")
+                //const {data: rsp} = await this.$http.post("login", this.loginForm)
+                const rsp = await Register(this.loginForm)
+                console.log("rsp:", rsp)
+
+                if (!rsp.status) {
+                     return ElMessage.error("注册失败: " + rsp.data)
                 }
 
-                ElMessage.success("登录成功");
-                window.sessionStorage.setItem("token", data.token)
-                this.$router.push('/home')
+                ElMessage.success("注册成功");
+                window.sessionStorage.setItem("token", rsp.token)
+                this.$router.push('/login')
             })
         }
     }

@@ -3,6 +3,7 @@ import Login from '@/components/Login.vue'
 import Home from '@/components/Home.vue'
 import Welcom from '@/components/Welcom.vue'
 import Users from '@/components/user/Users.vue'
+import Register from '@/components/Register.vue'
 
 const routes = [
   {
@@ -12,6 +13,10 @@ const routes = [
   {
     'path': '/login',
     component: Login
+  },
+  {
+    'path': '/register',
+    component: Register
   },
   {
     'path': '/home',
@@ -27,7 +32,7 @@ const routes = [
         component: Users
       }
     ]
-  }
+  },
 ]
 
 const router = createRouter({

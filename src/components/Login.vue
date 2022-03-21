@@ -77,8 +77,7 @@ export default {
                 if (!valid) return;
                 //const {data: rsp} = await this.$http.post("login", this.loginForm)
                 const data = await Login(this.loginForm)
-                console.log("rsp data:", data)
-                console.log(data)
+                console.log("login rsp data:", data)
 
                 if (!data.status) {
                      return ElMessage.error("登录失败")

@@ -28,23 +28,25 @@
             <!-- 数据表格 -->
             <el-table :data="userList" style="width: 100%" border stripe>
                 <el-table-column type="index" />
-                <el-table-column prop="date" label="Date" width="180" />
+                <!-- <el-table-column prop="date" label="Date" width="180" />
                 <el-table-column prop="name" label="Name" width="180" />
                 <el-table-column label="Status">
                     <template v-slot="data">
                         {{ data.row }}
                         <el-switch v-model="data.row.status" />
                     </template>
-                </el-table-column>
+                </el-table-column> -->
+                <el-table-column prop="id" label="Id" width="180" />
+                <el-table-column prop="name" label="Name" width="180" />
             </el-table>
 
             <!-- 分页 -->
             <el-pagination
             v-model:currentPage="queryInfo.pagenum"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :page-sizes="meta.pagesizes"
+            :page-size="meta.pagesize"
+            :total="meta.total"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             >
@@ -55,15 +57,23 @@
 
 <script>
 import { ElMessage } from 'element-plus'
+import { GetUserList } from '@/api/index.js'
+
 export default {
     data() {
         return {
             queryInfo: {
                 query: "",
                 pagenum: 1,
-                pagesize: 2,
+                pagesize: 0,
             },
-            userList: []
+            userList: [],
+            meta: {
+                total: 0,
+                pagenum: 0,
+                pagesize: 0,
+                pagesizes: []
+            }
         }
     },
     created() {
@@ -71,20 +81,23 @@ export default {
     },
     methods: {
         async getUserList() {
-            const {data: rsp} = await this.$http.get("user", this.queryInfo)
-            if (rsp.meta.status != 200) {
-                return ElMessage.error(rsp.meta.status)
+            // const {data: rsp} = await this.$http.get("user", this.queryInfo)
+            const rsp = await GetUserList(this.queryInfo)
+            if (!rsp.status) {
+                return ElMessage.error("获取用户列表失败")
             }
-            this.userList = rsp.data
-            console.log(this.userList)
+            this.userList = rsp.data.user_list
+            this.meta = rsp.data.meta
+            console.log("userList", this.userList)
+            console.log("meta:", this.meta)
         },
         handleSizeChange(newSize) {
-            console.log(newSize)
+            console.log("newSize:", newSize)
             this.queryInfo.pagesize = newSize
             this.getUserList()
         },
         handleCurrentChange(newPage) {
-            console.log(newPage)
+            console.log("newPage:", newPage)
             this.queryInfo.pagenum = newPage
             this.getUserList()
         }

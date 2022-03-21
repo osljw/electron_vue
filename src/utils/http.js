@@ -15,7 +15,7 @@ axios.defaults.headers.common = {
   "Content-Type": "application/json"
 }
 axios.interceptors.request.use(config => {
-  console.log(config)
+  console.log("axios config", config)
   config.headers.Authorization = window.sessionStorage.getItem("token")
   return config
 })

@@ -41,7 +41,7 @@
 
 <script>
 import { ElMessage } from 'element-plus';
-import { GetMenu} from '@/api/index.js'
+import { GetMenu } from '@/api/index.js'
 
 export default {
   data() {

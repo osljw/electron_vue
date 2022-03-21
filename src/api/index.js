@@ -10,3 +10,7 @@ export function Register(data) {
 export function GetMenu() {
     return http.get('menus')
 }
+
+export function GetUserList(query_info) {
+    return http.get('users', query_info)
+}

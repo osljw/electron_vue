@@ -6,7 +6,9 @@ import '@/assets/css/global.css'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 
-import DAGBoard from '../plugin/index'
+//import Chat from './components/chat/Chat'
+
+//import DAGBoard from '../plugin/index'
 
 //import axios from 'axios'
 
@@ -14,7 +16,6 @@ import DAGBoard from '../plugin/index'
 const app = createApp(App)
     .use(router)
     .use(ElementPlus)
-    .use(DAGBoard)
 
 //app.config.globalProperties.$http = axios
 
